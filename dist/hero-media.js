@@ -1,5 +1,5 @@
 // Progressive enhancement for an approved photo + optional approved 6–10s clip.
-// There is deliberately no source URL or video element in the current page.
+// Source provenance is recorded in content/approved-media.json.
 export function mountHeroMedia(root, environment = {}) {
   if (!root || root.dataset.approvedMedia !== 'true') return null;
   const video = root.querySelector('video');
@@ -19,10 +19,12 @@ export function mountHeroMedia(root, environment = {}) {
   let desired = false;
   let destroyed = false;
   let photoReady = false;
+  let initialPhotoHandled = false;
   let metadataReady = false;
   let playingReceived = false;
   let attempt = 0;
   let timeout;
+  let stallTimeout;
   let frame;
   let sourceAttached = false;
   let needsReload = false;
@@ -31,6 +33,8 @@ export function mountHeroMedia(root, environment = {}) {
   const clearPending = () => {
     if (timeout !== undefined) cancel(timeout);
     timeout = undefined;
+    if (stallTimeout !== undefined) cancel(stallTimeout);
+    stallTimeout = undefined;
     if (frame !== undefined && video.cancelVideoFrameCallback) video.cancelVideoFrameCallback(frame);
     frame = undefined;
   };
@@ -99,6 +103,9 @@ export function mountHeroMedia(root, environment = {}) {
     photoReady = photo.complete && photo.naturalWidth > 0;
     if (!photoReady || destroyed) return;
     button.hidden = false;
+    // Responsive poster swaps must not override a visitor's pause choice.
+    if (initialPhotoHandled) return;
+    initialPhotoHandled = true;
     if (!mobile.matches && !motion.matches && !connection?.saveData && !doc.hidden) void play();
   }
   button.hidden = true;
@@ -116,13 +123,20 @@ export function mountHeroMedia(root, environment = {}) {
   });
   on(video, 'playing', () => {
     if (!desired) { video.pause(); return; }
+    if (stallTimeout !== undefined) cancel(stallTimeout);
+    stallTimeout = undefined;
     playingReceived = true;
     revealWhenReady();
   });
   on(video, 'error', fail);
-  // Waiting is normal during initial buffering; the loading timeout covers it.
-  on(video, 'waiting', () => { if (desired && root.dataset.mediaState === 'playing') fail(); });
-  on(video, 'stalled', () => { if (desired && root.dataset.mediaState === 'playing') fail(); });
+  // A brief waiting event is normal at a loop boundary. Keep the decoded frame
+  // during that gap; fall back only if playback cannot recover within two seconds.
+  const buffering = () => {
+    if (!desired || root.dataset.mediaState !== 'playing' || stallTimeout !== undefined) return;
+    stallTimeout = schedule(() => { stallTimeout = undefined; if (desired) fail(); }, 2000);
+  };
+  on(video, 'waiting', buffering);
+  on(video, 'stalled', () => { if (video.readyState < 3) buffering(); });
   on(doc, 'visibilitychange', () => { if (doc.hidden) pause(); });
   on(motion, 'change', () => { if (motion.matches) pause(); });
   on(mobile, 'change', () => { if (mobile.matches) pause(); });

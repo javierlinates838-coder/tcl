@@ -78,14 +78,26 @@ test('rejected playback restores the photo and permits an explicit retry', async
   assert.equal(f.video.loads, 2); assert.equal(f.root.dataset.mediaState, 'playing');
   f.controller.destroy();
 });
-test('error, buffering after playback and unsuitable duration use the photo fallback', async () => {
+test('errors and persistent buffering use the photo fallback', async () => {
   for (const event of ['error', 'waiting', 'stalled']) {
     const f = fixture({ mobile: true }); await f.controller.play(); f.ready(); f.video.emit(event);
+    if (event !== 'error') for (const callback of [...f.timers.values()]) callback();
     assert.equal(f.root.dataset.mediaState, 'photo'); assert.equal(f.video.paused, true);
     f.controller.destroy();
   }
   const f = fixture({ mobile: true }); await f.controller.play(); f.video.duration = 80; f.video.emit('loadedmetadata');
   assert.equal(f.root.dataset.mediaState, 'photo'); assert.match(f.status.textContent, /unavailable/);
+  f.controller.destroy();
+});
+
+test('normal loop-boundary buffering recovers without interrupting the video', async () => {
+  const f = fixture({ mobile: true }); await f.controller.play(); f.ready();
+  f.video.emit('waiting');
+  assert.equal(f.root.dataset.mediaState, 'playing');
+  assert.equal(f.timers.size, 1);
+  f.video.emit('playing'); f.video.frameCallback?.();
+  assert.equal(f.timers.size, 0);
+  assert.equal(f.video.paused, false);
   f.controller.destroy();
 });
 test('slow loading times out without replacing the photograph', async () => {
@@ -115,4 +127,16 @@ test('a failed fallback photo prevents any video load', () => {
   f.photo.emit('error'); f.button.emit('click');
   assert.equal(f.video.loads, 0); assert.equal(f.button.hidden, true);
   f.controller.destroy();
+});
+
+test('responsive poster changes preserve a visitor pause and the mobile photo default', async () => {
+  const desktop = fixture(); await Promise.resolve(); desktop.ready();
+  desktop.controller.pause(); desktop.photo.emit('load');
+  assert.equal(desktop.video.plays, 1);
+  assert.equal(desktop.video.paused, true);
+  desktop.controller.destroy();
+  const mobile = fixture({ mobile: true });
+  mobile.narrow.change(false); mobile.photo.emit('load');
+  assert.equal(mobile.video.loads, 0);
+  mobile.controller.destroy();
 });

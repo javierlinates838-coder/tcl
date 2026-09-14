@@ -1,21 +1,16 @@
 # TLC Detailing
 
-Premium static website in the existing project. No framework or runtime dependencies were added. Hosting identity and production remain unchanged.
+The existing static website, refined around real TLC photography, a silent Mercedes interior film and attributed customer review excerpts. No framework or production dependencies were added. Production hosting remains unchanged.
 
 ## Local use
+- npm run dev — http://127.0.0.1:4173
+- npm run build — validates the site and copies a static release to ignored .sites-build/.
+- npm test — runs 16 tests using Node's built-in runner.
+- Local media failure/preference fixture: http://127.0.0.1:4173/__checks__/media.html (outside the deployable dist folder).
 
-- `npm run dev` starts the existing preview at http://127.0.0.1:4173.
-- `npm run build` validates HTML anchors, local assets, imports, JavaScript syntax and absence of stock references, then emits a byte-for-byte static release under ignored `.sites-build/`.
-- `npm test` runs the quote and progressive-video controller tests with Node's built-in runner.
+Canonical site files are in dist/. Quote details remain in page memory. Open Messages opens a draft; it does not send, confirm pricing or book. Native details and package SMS/call links remain available without JavaScript.
 
-The canonical site files remain in `dist/`. Quote details stay in the page's memory. Open Messages creates an SMS draft; it does not send, confirm a price, or reserve an appointment. Copy has a manual selection fallback. No backend, persistence, tracking, or integration was added.
+## Recovery and sources
+Tag checkpoint-before-real-media-20260914 preserves the version before this photographic refinement. Tag checkpoint-before-premium-upgrade-20260914 preserves the original site. Do not publish or push without user approval.
 
-Native details and SMS/call links remain usable without JavaScript. Reduced-motion users get no motion or autoplay. Content is visible without entrance animations.
-
-## Recoverable checkpoint
-
-`checkpoint-before-premium-upgrade-20260914` points to the original committed site. The working project contains the upgrade. Do not push, publish, or modify hosting access without the user's approval.
-
-## Media and evidence
-
-Read `MEDIA.md` for the original-media blocker and the optional video integration contract. The stock assets have been removed from the serving folder. See `content/sources.md` for package and testimonial provenance. Original photo crops, image optimization, and real video playback cannot be completed without approved media.
+See MEDIA.md, VALIDATION.md and content/ for media, reviews, package provenance and measured checks.

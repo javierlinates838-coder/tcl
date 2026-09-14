@@ -1,23 +1,25 @@
-# Upgrade validation — September 14, 2026
+# Validation — September 14, 2026
 
-## Passed
+All work is in the existing static project. Hosting configuration and production deployment are unchanged. Recoverable pre-change tag: checkpoint-before-real-media-20260914.
 
-- Static build: five serving files, 49,228 bytes before fonts/HTTP compression. HTML anchors, local references, ES module imports and JavaScript syntax validated. This is a file-size measurement, not a load-time or Lighthouse score.
-- 14 Node tests: quote package identity, undecided requests, special characters, input bounds, media approval gating, mobile/data-saving/reduced-motion gating, photo/metadata/frame readiness, explicit Play/Pause, cancellation, timeout, errors, buffering, unsuitable duration, retry and photo failure.
-- Browser viewports: 320, 390, 768 and 1440 CSS pixels. Document widths stayed within their viewports. The 320px heading wrap was refined and checked again.
-- Desktop package comparison: all four rows have matching measured top positions and heights after the subgrid fix.
-- Mobile Full Detail selection: selected radio, visible card state, focused radio and composed SMS all carry Extra TLC Full Detail. Vehicle, area and notes were entered and verified in the message preview and encoded SMS link.
-- Copy message returned the success state. No message was sent and no appointment was confirmed.
-- Mobile menu opened with Enter, Tab reached its first link, and Escape closed the menu and returned focus to its summary.
-- FAQ opened with Enter and exposed its answer.
-- Browser console contained no captured errors after the final reload.
-- Page, stylesheet and three JavaScript modules returned HTTP 200 locally. Removed stock photo paths returned 404; no image or video element is present in the page.
-- Git whitespace check passed. The hosting manifest is unchanged from the original checkpoint. No source push, hosting mutation or deployment was performed.
+## Executed
+- npm test: 16 quote/media tests pass.
+- Static build: local references, anchors, JS syntax and imports validated; current content/approved-media.json records the real media.
+- Real in-app Chromium browser: desktop video decoded and continued playing across multiple 9.20s loops; keyboard Play/Pause checked. Mobile 390px and 320px reloads show photograph, null video src, no automatic video request; explicit mobile Play works.
+- Responsive checks at actual DOM widths 320, 390, 768 and 1440: no document horizontal overflow. Fixed a clipped headline at 320px and rechecked its scrollWidth/clientWidth. Desktop package card heights match. Gallery, service photos and poster loaded; desktop and mobile crops visually inspected.
+- Keyboard menu Enter/Tab/Escape closes and restores focus; native FAQ opens via Enter. Clear focus outlines retained.
+- Both package buttons carry the correct selection to the form. Vehicle and area persist when switching packages and appear in the encoded SMS draft. Call/SMS targets retain the actual TLC number. No message was sent and no booking made.
+- Browser fixture at /__checks__/media.html: reduced-motion and Save-Data input paths leave src null; failed video URL and rejected playback retain a loaded photo with accurate fallback status. Preference inputs are injected into the real controller in this local fixture; OS/browser preference settings were not changed.
+- Media decode via ffmpeg: complete clip passed, no audio stream, H.264/yuv420p, moov before mdat.
+- Local preview video range requests: normal and suffix requests return 206 with video/mp4 and correct byte counts; out-of-range requests return 416.
+- Unit tests cover decoded-frame crossfade, slow loading, cancellation, missing photo, persistent buffering, loop-buffer recovery, rejected playback, preference changes and preserving pause across responsive poster loads.
 
-## Limits and remaining work
+## Fixes from checks
+- Mobile hero heading could clip at 320px: reduced its narrow-screen type size.
+- Hiding the mobile line break joined two words: preserved whitespace.
+- A responsive poster reload could restart video after Pause: autoplay is now evaluated once.
+- Brief loop-boundary waiting could stop playback: allow two seconds to recover before fallback.
+- Preview served MP4 without media type/ranges: added correct MIME, HEAD and byte-range responses.
 
-- No approved original TLC media exists in the project. Actual image loading/crops/optimization, before-and-after matching, decoded video playback and photograph fallback cannot be checked with genuine content yet. The optional video controller was tested with mocked elements; it is inactive on the actual page.
-- Reduced-motion playback logic is tested with mocked media-query changes. The stylesheet disables animation and transitions under the reduced-motion query; an OS-level preference switch was not performed in the browser.
-- Call/SMS destinations and the composed draft were inspected. External dialers and message sending were not triggered.
-- Copy success was exercised in the browser; the manual-copy failure path is present but was not forced through a browser permission failure.
-- Google rating and testimonial come from the supplied screenshots, not a live review integration.
+## Limits
+No Safari/iOS hardware run, production network timing, Lighthouse score or booking delivery is claimed. Reviews are verified excerpts with a dated Google rating snapshot, not a live feed. No authentic matched before/after pair was available.
