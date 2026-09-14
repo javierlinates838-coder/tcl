@@ -1,57 +1,33 @@
 {
+  "status": "placeholder",
+  "note": "Every asset listed here is a generated neutral placeholder (gradients rendered with ffmpeg). None of it depicts a real business, vehicle or person. Replace each entry with the new client's own approved media and record its source before publishing.",
   "heroPhoto": {
-    "desktop": "/assets/tlc-motion-poster.webp",
-    "mobile": "/assets/tlc-motion-poster-mobile.webp",
-    "source": "Google business owner video CIHM0ogKEICAgIDJ0Y21JA",
-    "frameSeconds": 6
+    "desktop": "/assets/placeholder-hero-poster.webp",
+    "mobile": "/assets/placeholder-hero-poster-mobile.webp",
+    "requirements": "1080 x 1920 WebP (desktop) and 540 x 960 WebP (mobile), ideally a still from the hero video.",
+    "source": "TODO: client-supplied"
   },
   "heroVideo": {
-    "file": "/assets/tlc-interior-film.mp4",
-    "durationSeconds": 9.2,
-    "bytes": 1817545,
+    "file": "/assets/placeholder-hero-loop.mp4",
+    "durationSeconds": 8,
     "audio": false,
     "width": 720,
     "height": 1280,
-    "source": "content/video-source.json"
+    "requirements": "Silent H.264 MP4, portrait 720 x 1280, 6 to 10 seconds (hero-media.js rejects other durations), faststart.",
+    "source": "TODO: client-supplied"
   },
   "workPhotos": [
-    {
-      "file": "/assets/tlc-bmw-960.webp",
-      "responsive": "/assets/tlc-bmw-480.webp",
-      "source": "content/owner-photo-sources.json"
-    },
-    {
-      "file": "/assets/tlc-interior-960.webp",
-      "responsive": "/assets/tlc-interior-480.webp",
-      "source": "content/owner-photo-sources.json"
-    },
-    {
-      "file": "/assets/tlc-wheel-960.webp",
-      "responsive": "/assets/tlc-wheel-480.webp",
-      "source": "content/owner-photo-sources.json"
-    },
-    {
-      "file": "/assets/tlc-lexus-960.webp",
-      "responsive": "/assets/tlc-lexus-480.webp",
-      "source": "content/owner-photo-sources.json"
-    },
-    {
-      "file": "/assets/tlc-porsche-960.webp",
-      "responsive": "/assets/tlc-porsche-480.webp",
-      "source": "content/owner-photo-sources.json"
-    },
-    {
-      "file": "/assets/tlc-paint-960.webp",
-      "responsive": "/assets/tlc-paint-480.webp",
-      "source": "content/owner-photo-sources.json"
-    }
+    { "slot": "gallery exterior (3:2 crop)", "file": "/assets/placeholder-work-01-960.webp", "responsive": "/assets/placeholder-work-01-480.webp", "source": "TODO" },
+    { "slot": "gallery interior", "file": "/assets/placeholder-work-02-960.webp", "responsive": "/assets/placeholder-work-02-480.webp", "source": "TODO" },
+    { "slot": "gallery close-up", "file": "/assets/placeholder-work-03-960.webp", "responsive": "/assets/placeholder-work-03-480.webp", "source": "TODO" },
+    { "slot": "Quick Detail package", "file": "/assets/placeholder-package-01-960.webp", "responsive": "/assets/placeholder-package-01-480.webp", "source": "TODO" },
+    { "slot": "Full Detail package", "file": "/assets/placeholder-package-02-960.webp", "responsive": "/assets/placeholder-package-02-480.webp", "source": "TODO" },
+    { "slot": "contact panel", "file": "/assets/placeholder-contact-960.webp", "responsive": "/assets/placeholder-contact-480.webp", "source": "TODO" }
   ],
+  "photoRequirements": "3:4 portrait WebP at 960 x 1280 and 480 x 640. Do not enlarge small originals.",
   "logo": {
-    "file": "/assets/tlc-logo.webp",
-    "source": "https://www.instagram.com/tlc.detailing_661/",
-    "originalResolution": "150 x 150",
-    "displayResolution": "52 x 52"
+    "file": "/assets/placeholder-logo.svg",
+    "source": "Generated neutral mark. Replace with the client's logo (roughly square, displayed at 52 px)."
   },
-  "beforeAfterPairs": [],
-  "note": "All displayed media comes from TLC’s business-owner Google uploads or its own Instagram profile. User requested these public business assets. No stock, generated photos, competitor media, screenshots, or invented results. No verified matching before/after pair was located."
+  "beforeAfterPairs": []
 }

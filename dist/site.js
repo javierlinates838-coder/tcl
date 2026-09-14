@@ -1,4 +1,4 @@
-import { PACKAGES, createQuoteMessage, createSmsUrl } from './quote.js';
+import { PACKAGES, PHONE_DISPLAY, createQuoteMessage, createSmsUrl } from './quote.js';
 import { mountHeroMedia } from './hero-media.js';
 import { mountSectionMotion } from './section-motion.js';
 
@@ -74,12 +74,12 @@ copyButton.addEventListener('click', async () => {
   const message = createQuoteMessage(readQuote());
   try {
     await navigator.clipboard.writeText(message);
-    copyStatus.textContent = 'Message copied. Paste it into a text to (832) 466-1100.';
+    copyStatus.textContent = 'Message copied. Paste it into a text to ' + PHONE_DISPLAY + '.';
   } catch {
     previewDisclosure.open = true;
     preview.focus();
     preview.select();
-    copyStatus.textContent = 'Copy the selected message, then paste it into a text to (832) 466-1100.';
+    copyStatus.textContent = 'Copy the selected message, then paste it into a text to ' + PHONE_DISPLAY + '.';
   }
 });
 copyButton.hidden = false;
@@ -98,8 +98,8 @@ function hideNetlifyBranding() {
     return href.includes('netlify.com') || href.includes('netlify.app') || href.includes('netlify') || hasNetlifyText(text) || title.includes('netlify') || aria.includes('netlify');
   };
   const hideNode = node => {
-    if (node.dataset?.tlcHideNetlify === 'true') return;
-    node.dataset.tlcHideNetlify = 'true';
+    if (node.dataset?.hideNetlify === 'true') return;
+    node.dataset.hideNetlify = 'true';
     node.style.setProperty('display', 'none', 'important');
     node.setAttribute('aria-hidden', 'true');
     node.setAttribute('tabindex', '-1');
