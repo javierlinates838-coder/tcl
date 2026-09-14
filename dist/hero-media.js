@@ -6,6 +6,7 @@ export function mountHeroMedia(root, environment = {}) {
   const photo = root.querySelector('[data-hero-photo]');
   const button = root.querySelector('[data-media-toggle]');
   const status = root.querySelector('[data-media-status]');
+  const buttonLabel = button?.querySelector?.('[data-media-label]') ?? button;
   const src = video?.dataset.src;
   if (!photo || !video || !button || !/^\/assets\/[^?#]+\.(mp4|webm)$/i.test(src || '') || src.includes('..')) return null;
   const doc = environment.document ?? document;
@@ -40,7 +41,7 @@ export function mountHeroMedia(root, environment = {}) {
   };
   function showPhoto(message = '') {
     root.dataset.mediaState = 'photo';
-    button.textContent = 'Play video';
+    buttonLabel.textContent = 'Play video';
     button.setAttribute('aria-label', 'Play background video');
     button.setAttribute('aria-pressed', 'false');
     button.disabled = false;
@@ -64,7 +65,7 @@ export function mountHeroMedia(root, environment = {}) {
       if (timeout !== undefined) cancel(timeout);
       timeout = undefined;
       root.dataset.mediaState = 'playing';
-      button.textContent = 'Pause video';
+      buttonLabel.textContent = 'Pause video';
       button.setAttribute('aria-label', 'Pause background video');
       button.setAttribute('aria-pressed', 'true');
       button.disabled = false;
@@ -79,7 +80,7 @@ export function mountHeroMedia(root, environment = {}) {
     desired = true;
     const thisAttempt = ++attempt;
     playingReceived = false;
-    button.textContent = 'Cancel video';
+    buttonLabel.textContent = 'Cancel video';
     button.setAttribute('aria-label', 'Cancel loading background video');
     announce('Loading video. The photograph remains visible.');
     video.muted = true;

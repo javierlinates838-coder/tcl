@@ -15,7 +15,7 @@ if (new Set(ids).size !== ids.length) throw Error('Duplicate HTML ids.');
 for (const [, anchor] of html.matchAll(/href="#([^"]+)"/g)) if (!ids.includes(anchor)) throw Error('Missing anchor: ' + anchor);
 const localReferences = [...html.matchAll(/(?:src|href)="(\/[^"#]*)"/g)].map(match => match[1]);
 for (const match of css.matchAll(/url\(['"]?(\/[^'"\)]+)['"]?\)/g)) localReferences.push(match[1]);
-for (const ref of localReferences) if (!fs.statSync(path.join(root, ref), { throwIfNoEntry: false })?.isFile()) throw Error('Missing asset: ' + ref);
+for (const ref of localReferences) if (!fs.statSync(path.join(root, ref.split(/[?#]/)[0]), { throwIfNoEntry: false })?.isFile()) throw Error('Missing asset: ' + ref);
 if (/(?:unsplash|pexels|hero\.jpg|detail\.jpg)/i.test(html + css)) throw Error('Disallowed stock media reference.');
 const files = fs.readdirSync(root, { recursive: true }).filter(name => fs.statSync(path.join(root, name)).isFile()).sort();
 const digest = createHash('sha256');
