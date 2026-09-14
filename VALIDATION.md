@@ -48,3 +48,11 @@ No Safari/iOS hardware run, production network timing, Lighthouse score or booki
 - Desktop and 390px mobile visuals inspected. Additional 320, 768 and 1440px checks showed no document overflow or clipped hero heading.
 - Mobile reload showed a loaded photo and null video src. Explicit Play decoded the real video; Enter on the focused control returned to the photo. Measured headline and quote-button positions and heights were identical before/after playback.
 - Build and all 23 tests passed. Recovery tag: checkpoint-before-background-blend-20260914. No hosting changes.
+
+## Custom icons, gold photo frames and Netlify
+- Recovery tag: checkpoint-before-custom-icons-20260914. Release c81a6e2.
+- Social links use accessible Instagram/TikTok SVG icons. A shared custom SVG sprite supplies arrows, controls, stars and service markers. Play/Pause labels preserve icon children.
+- Framed real photos use a thin double gold border and dark inset. Gallery interiors/wheels preserve their full subjects; package and contact frames retain intentional ratios.
+- Desktop and 390px phone rendering inspected. No horizontal overflow at those widths. Keyboard menu Enter/Escape worked. Full Detail selected the matching quote radio and SMS draft. Explicit mobile Play/Pause retained all three control SVGs and restored the Play label.
+- npm test: all 23 passed. npm run build: passed. Published via existing Netlify GitHub connection on user request.
+- Live URL: https://tlc-detailing-bakersfield.netlify.app/. Verified published gallery images loaded, custom icons and borders rendered, and video reached readyState 4. Deploy 6aa836369cb84673193e451b.

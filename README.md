@@ -1,6 +1,6 @@
 # TLC Detailing
 
-The existing static website, refined around real TLC photography, a silent Mercedes interior film and attributed customer review excerpts. No framework or production dependencies were added. Production hosting remains unchanged.
+The existing static website, refined around real TLC photography, a silent Mercedes interior film and attributed customer review excerpts. No framework or production dependencies were added. Published on Netlify at https://tlc-detailing-bakersfield.netlify.app, connected to javierlinates838-coder/tcl main. netlify.toml publishes dist directly.
 
 ## Local use
 - npm run dev — http://127.0.0.1:4173
@@ -16,3 +16,4 @@ Tag checkpoint-before-real-media-20260914 preserves the version before this phot
 Photo framing and entrance-motion changes are recoverable from tag checkpoint-before-photo-motion-20260914.
 
 See MEDIA.md, VALIDATION.md and content/ for media, reviews, package provenance and measured checks.
+
