@@ -184,3 +184,16 @@ h1,h2{font-family:var(--display);font-weight:600;letter-spacing:-.015em}h1{font-
 @media(max-width:900px){.work-grid{grid-template-columns:1fr 1fr}.work-main{grid-column:1/-1}.package{padding:1.5rem 1.3rem 1rem}.package-top{gap:.9rem}.package h3{font-size:2.3rem}.package-intro{font-size:.8rem}.package-kicker{letter-spacing:.06em}.contact-photo{gap:1rem}}
 @media(max-width:680px){.work-grid{gap:1.4rem .8rem}.work-photo figcaption{padding:.85rem 0;gap:.3rem}.work-photo figcaption strong{font-size:1.6rem}.work-photo figcaption span{font-size:.54rem}.work-credit{padding-top:1rem}.package{padding:1.4rem 1.3rem 1rem}.package-top{gap:1rem;margin-bottom:1.5rem}.package h3{font-size:clamp(2.2rem,8vw,3rem)}.package-intro{font-size:.85rem}.contact-photo{margin-top:1.7rem;max-width:25rem}.contact-photo figcaption strong{font-size:1.9rem}}
 @media(prefers-reduced-motion:reduce){.button:hover,.review-card:hover{transform:none}.desktop-nav a:hover::after,.desktop-nav a:focus-visible::after{transform:scaleX(1)}}
+/* Let the real footage dissolve into the page instead of reading as a pasted panel. */
+.hero-visual[data-hero-media]{inset:0 0 0 28%;background:var(--bg)}
+.hero-visual[data-hero-media]::after{background:linear-gradient(90deg,#0d0e0e 0%,#0d0e0ef5 10%,#0d0e0ed6 23%,#0d0e0e80 40%,#0d0e0e18 64%,#0d0e0e0d 82%,#0d0e0e55 100%),linear-gradient(180deg,#0d0e0ebf 0%,#0d0e0e25 18%,transparent 42%,#0d0e0e35 70%,#0d0e0ed9 91%,#0d0e0e 100%)}
+.hero::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 65% 45%,#c6a46b0b,transparent 60%)}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;pointer-events:none;background:linear-gradient(90deg,transparent 5%,#c6a46b45 40%,#c6a46b18 72%,transparent)}
+.hero-visual[data-hero-media] video{transform:scale(1.025);transition:opacity 1000ms ease-in-out,transform 1400ms cubic-bezier(.22,.61,.36,1)}
+.hero-visual[data-hero-media][data-media-state=playing] video{transform:scale(1)}
+.media-caption{padding:.8rem 0;border-top:1px solid #ffffff26}
+.trust-strip{background:linear-gradient(180deg,#0d0e0e,#161717);border-top:0}
+@media(min-width:1500px){.hero-visual[data-hero-media]{left:32%}}
+@media(min-width:681px) and (max-width:900px){.hero-visual[data-hero-media]{left:22%}.hero-visual[data-hero-media]::after{background:linear-gradient(90deg,#0d0e0e 0%,#0d0e0ef2 13%,#0d0e0eb3 35%,#0d0e0e30 70%,#0d0e0e50),linear-gradient(180deg,#0d0e0eb3,transparent 35%,#0d0e0e40 70%,#0d0e0e 100%)}}
+@media(max-width:680px){.hero-visual[data-hero-media]{inset:265px 0 0}.hero-visual[data-hero-media]::after{background:linear-gradient(180deg,#0d0e0e 0%,#0d0e0ef5 9%,#0d0e0eb8 25%,#0d0e0e18 52%,#0d0e0e35 70%,#0d0e0ed9 91%,#0d0e0e 100%),linear-gradient(90deg,#0d0e0e55,transparent 25%,transparent 75%,#0d0e0e55)}.media-caption{padding:.65rem 0}.hero::before{background:none}}
+@media(prefers-reduced-motion:reduce){.hero-visual[data-hero-media] video{transform:none}}

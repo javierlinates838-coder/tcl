@@ -41,3 +41,10 @@ No Safari/iOS hardware run, production network timing, Lighthouse score or booki
 - Real browser fixture ran three entrance animations (three active, content visible). With the reduced-motion fixture input enabled, replay started zero effects, with all content visible. This injects a preference into the real controller; OS preferences were not changed.
 - Four new unit tests cover static reduced/unsupported paths, once-only entrances, cancelling active and pending effects when the preference changes, and keeping focused cards stationary. Hero/quote controls are excluded from entrances.
 - Native mobile menu opens and closes through the Services link. Existing quote/video tests remain passing; no message, booking or deployment was performed.
+
+## Hero background blend
+- Expanded the existing real-media layer and softened its left, top, right and bottom transitions into the page. The trust strip now continues the same dark background fade.
+- Photo-to-video opacity transition is 1 second, with a restrained 2.5% scale settling over 1.4 seconds. Reduced-motion CSS disables the transitions; the immediate photo and existing playback safeguards remain.
+- Desktop and 390px mobile visuals inspected. Additional 320, 768 and 1440px checks showed no document overflow or clipped hero heading.
+- Mobile reload showed a loaded photo and null video src. Explicit Play decoded the real video; Enter on the focused control returned to the photo. Measured headline and quote-button positions and heights were identical before/after playback.
+- Build and all 23 tests passed. Recovery tag: checkpoint-before-background-blend-20260914. No hosting changes.
