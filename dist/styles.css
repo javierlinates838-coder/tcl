@@ -217,3 +217,11 @@ h1,h2{font-family:var(--display);font-weight:600;letter-spacing:-.015em}h1{font-
 @media(max-width:680px){.section-heading .social-links{margin-top:1.2rem}.photo-frame,.package-photo{padding:5px}.photo-frame::after,.package-photo::after{inset:2px}.footer-links{gap:.65rem}.footer-phone{margin-left:.35rem}.footer-phone .icon{width:1rem;height:1rem}}
 .menu-stroke-top{transform-origin:12px 8px!important}.menu-stroke-bottom{transform-origin:12px 16px!important}
 .work-photo .photo-frame{aspect-ratio:3/4}.work-main .photo-frame{aspect-ratio:3/2}.work-photo .photo-frame img{height:100%}.work-interior .photo-frame img,.work-wheel .photo-frame img{object-fit:contain}
+/* Netlify footer badge removal */
+[href*='netlify.com'],
+[href*='netlify.app'],
+iframe[src*='netlify'],
+[data-tlc-hide-netlify] {
+  display: none !important;
+  visibility: hidden !important;
+}

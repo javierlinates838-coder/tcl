@@ -87,6 +87,44 @@ previewDisclosure.hidden = false;
 updateQuote();
 document.querySelector('#year').textContent = String(new Date().getFullYear());
 
+function hideNetlifyBranding() {
+  const normalized = text => (text || '').toLowerCase();
+  const hasNetlifyText = text => /\bpowered by netlify\b/.test(normalized(text));
+  const shouldHide = element => {
+    const href = normalized(element.getAttribute?.('href'));
+    const title = normalized(element.getAttribute?.('title'));
+    const aria = normalized(element.getAttribute?.('aria-label'));
+    const text = normalized(element.textContent);
+    return href.includes('netlify.com') || href.includes('netlify.app') || href.includes('netlify') || hasNetlifyText(text) || title.includes('netlify') || aria.includes('netlify');
+  };
+  const hideNode = node => {
+    if (node.dataset?.tlcHideNetlify === 'true') return;
+    node.dataset.tlcHideNetlify = 'true';
+    node.style.setProperty('display', 'none', 'important');
+    node.setAttribute('aria-hidden', 'true');
+    node.setAttribute('tabindex', '-1');
+  };
+
+  document.querySelectorAll('a[href], iframe[src], div, section, aside, footer, header').forEach(node => {
+    if (shouldHide(node)) {
+      const wrapper = node.closest('div, section, aside, footer, header') || node;
+      hideNode(wrapper);
+    }
+  });
+
+  document.querySelectorAll('*[style*="fixed"]').forEach(node => {
+    if (node.children.length === 0 && hasNetlifyText(node.textContent)) {
+      hideNode(node);
+      return;
+    }
+    if (node.tagName === 'A' && /netlify/i.test(node.href)) hideNode(node);
+  });
+}
+
+hideNetlifyBranding();
+const netlifyObserver = new MutationObserver(hideNetlifyBranding);
+if (document.body) netlifyObserver.observe(document.body, { childList: true, subtree: true });
+
 mountSectionMotion(document, reducedMotion);
 
 const mediaRoot = document.querySelector('[data-hero-media]');
