@@ -1,5 +1,6 @@
 import { PACKAGES, createQuoteMessage, createSmsUrl } from './quote.js';
 import { mountHeroMedia } from './hero-media.js';
+import { mountSectionMotion } from './section-motion.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const menu = document.querySelector('#mobile-menu');
@@ -86,19 +87,7 @@ previewDisclosure.hidden = false;
 updateQuote();
 document.querySelector('#year').textContent = String(new Date().getFullYear());
 
-// Content is visible by default. Only two noncritical headings receive a small,
-// once-only entrance, and no movement affects the hero or quote controls.
-if (!reducedMotion.matches && 'IntersectionObserver' in window) {
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      if (!reducedMotion.matches) entry.target.classList.add('revealed');
-      observer.unobserve(entry.target);
-    });
-  }, { threshold: 0.3 });
-  document.querySelectorAll('#work h2, #reviews h2').forEach(node => observer.observe(node));
-  reducedMotion.addEventListener('change', event => { if (event.matches) observer.disconnect(); });
-}
+mountSectionMotion(document, reducedMotion);
 
 const mediaRoot = document.querySelector('[data-hero-media]');
 if (mediaRoot) mountHeroMedia(mediaRoot);

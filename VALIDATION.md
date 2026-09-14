@@ -3,7 +3,7 @@
 All work is in the existing static project. Hosting configuration and production deployment are unchanged. Recoverable pre-change tag: checkpoint-before-real-media-20260914.
 
 ## Executed
-- npm test: 19 quote/media tests pass.
+- npm test: 23 quote/media/motion tests pass.
 - Static build: local references, anchors, JS syntax and imports validated; current content/approved-media.json records the real media.
 - Real in-app Chromium browser: desktop video decoded and continued playing across multiple 9.20s loops; keyboard Play/Pause checked. Mobile 390px and 320px reloads show photograph, null video src, no automatic video request; explicit mobile Play works.
 - Responsive checks at actual DOM widths 320, 390, 768 and 1440: no document horizontal overflow. Fixed a clipped headline at 320px and rechecked its scrollWidth/clientWidth. Desktop package card heights match. Gallery, service photos and poster loaded; desktop and mobile crops visually inspected.
@@ -32,3 +32,12 @@ No Safari/iOS hardware run, production network timing, Lighthouse score or booki
 - Made sticky header opaque after observing text showing through it. Removed the hidden line break that joined hero sentences on mobile. Review link accessible labels now describe the actual destination (TLC's review listing).
 - Responsive DOM sweep at 320, 360, 361, 375, 390, 414, 680, 681, 768, 900, 901, 1024 and 1280: no horizontal document overflow or clipped target headings/controls. Copy and the Full Detail SMS draft were checked with sample vehicle/area data.
 - Recovery tag before this patch: checkpoint-before-bugfixes-20260914. No hosting/deployment changes.
+
+## Photo framing and animation follow-up
+- Recovery tag: checkpoint-before-photo-motion-20260914.
+- Visually inspected revised gallery at 1280px and 375px, package photos on desktop and phone, and the classic-car image beside the quote panel. Whole wheels/interior and vehicle roof-to-bumper framing are preserved.
+- Additional DOM sweep at 320, 414, 680, 681, 900, 901 and 1440px: no horizontal document overflow or clipped package summaries, package headings or photo captions. Gallery ratios stay 3:2 / 3:4 / 3:4.
+- Full Detail selection reached the form at 104px below the sticky header at 375px. Tab moved from the selected package to the vehicle input. Mobile reload left video src null. All six photo subjects loaded when reached; no browser console errors were reported.
+- Real browser fixture ran three entrance animations (three active, content visible). With the reduced-motion fixture input enabled, replay started zero effects, with all content visible. This injects a preference into the real controller; OS preferences were not changed.
+- Four new unit tests cover static reduced/unsupported paths, once-only entrances, cancelling active and pending effects when the preference changes, and keeping focused cards stationary. Hero/quote controls are excluded from entrances.
+- Native mobile menu opens and closes through the Services link. Existing quote/video tests remain passing; no message, booking or deployment was performed.

@@ -1,8 +1,10 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TLC local media verification</title><link rel="stylesheet" href="/styles.css"><style>body{padding:2rem}.fixture{position:relative;height:70vh;max-width:600px;isolation:isolate}.fixture [data-hero-media]{inset:0}.fixture [data-media-toggle]{position:absolute;bottom:1rem;right:1rem}.fixture-status{white-space:pre-wrap}</style>
 <h1 style="font-size:2rem">Local media verification</h1><nav><a href="?mode=normal">Normal playback</a> · <a href="?mode=reduced">Reduced motion</a> · <a href="?mode=failed">Failed video</a> · <a href="?mode=blocked">Rejected autoplay</a> · <a href="?mode=data">Save data</a></nav>
 <button type="button" id="native-pause">Pause through browser media API</button><p id="fixture-status" class="fixture-status" role="status"></p><div class="fixture"><div data-hero-media data-approved-media="true"><picture><img data-hero-photo src="/assets/tlc-motion-poster-mobile.webp" width="540" height="960" alt="Real TLC Mercedes interior"></picture><video data-src="/assets/tlc-interior-film.mp4" muted playsinline preload="none"></video><button data-media-toggle hidden>Play video</button><span data-media-status role="status" class="sr-only"></span></div></div>
+<section id="motion-demo" style="padding:3rem 0"><h2 style="font-size:2rem">Entrance verification</h2><label><input id="reduce-entrances" type="checkbox"> Reduce entrance motion</label> <button id="run-entrances" type="button">Run entrances</button><p id="entrance-status" role="status"></p><div class="review-cards"><article class="review-card">Test card one</article><article class="review-card">Test card two</article><article class="review-card">Test card three</article></div></section>
 <script type="module">
 import {mountHeroMedia} from '/hero-media.js';
+import {mountSectionMotion} from '/section-motion.js';
 const mode=new URL(location.href).searchParams.get('mode') || 'reduced';
 const root=document.querySelector('[data-hero-media]');
 const video=root.querySelector('video');
@@ -19,4 +21,26 @@ function report(){document.querySelector('#fixture-status').textContent=JSON.str
 new MutationObserver(report).observe(root,{attributes:true,childList:true,subtree:true});
 document.querySelector('#native-pause').addEventListener('click',()=>video.pause());
 video.addEventListener('pause',report);video.addEventListener('playing',report);report();
+// Exercise the real animation API with observable results in this local fixture.
+const entranceQuery = new EventTarget();
+const reduceInput = document.querySelector('#reduce-entrances');
+const actualMotion = realQuery('(prefers-reduced-motion: reduce)');
+reduceInput.checked = mode === 'reduced';
+Object.defineProperty(entranceQuery,'matches',{get:()=>reduceInput.checked || actualMotion.matches});
+let started = 0;
+const active = new Set();
+function reportEntrances(){document.querySelector('#entrance-status').textContent=JSON.stringify({reduced:entranceQuery.matches,started,active:active.size,visible:[...document.querySelectorAll('.review-card')].every(node=>Number(getComputedStyle(node).opacity)>0)},null,2);}
+document.querySelectorAll('.review-card').forEach(node=>{
+  const animate=node.animate.bind(node);
+  node.animate=(...args)=>{
+    const effect=animate(...args); started++; active.add(effect); reportEntrances();
+    const finish=()=>{active.delete(effect);reportEntrances();};
+    effect.finished.then(finish,finish); return effect;
+  };
+});
+let entrances=mountSectionMotion(document,entranceQuery);
+reduceInput.addEventListener('change',()=>{entranceQuery.dispatchEvent(new Event('change'));reportEntrances();});
+actualMotion.addEventListener('change',()=>entranceQuery.dispatchEvent(new Event('change')));
+document.querySelector('#run-entrances').addEventListener('click',()=>{entrances.destroy();started=0;entrances=mountSectionMotion(document,entranceQuery);reportEntrances();});
+reportEntrances();
 </script></html>

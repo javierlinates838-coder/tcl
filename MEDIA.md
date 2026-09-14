@@ -17,3 +17,9 @@ Playback rejection, source errors, an eight-second loading deadline or persisten
 
 ## Remaining content
 No verified before-and-after pair was located. No comparison slider or claimed transformation was fabricated. Higher-resolution original Instagram post access was login-gated; full-size verified Google owner photos were used instead.
+
+## Photo framing refinement
+- BMW gallery image uses a 3:2 crop at 50% 60%, preserving roof, wheels and bumper. Interior and wheel retain their native 3:4 framing. Desktop aligns all three images in one row; mobile places the BMW above the two portrait details. Captions sit below photographs.
+- Lexus and Porsche now sit beside package titles in 4:5 portrait frames. The Porsche is bottom-aligned to keep its entire front visible. Responsive image sizes now match these smaller panels.
+- The classic-car paint image is a lazy-loaded, responsive image with descriptive alt text in a 4:5 frame, replacing the heavily cropped decorative background.
+- No media was added, enlarged, generated or downloaded for these changes.
