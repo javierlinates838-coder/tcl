@@ -1,8 +1,104 @@
-const toggle=document.querySelector('.menu-toggle');
-const navigation=document.querySelector('#navigation');
-function closeMenu(){navigation.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Open menu');}
-toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';navigation.classList.toggle('is-open',open);toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close menu':'Open menu');});
-navigation.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeMenu));
-document.addEventListener('keydown',event=>{if(event.key==='Escape'&&toggle.getAttribute('aria-expanded')==='true'){closeMenu();toggle.focus();}});
-document.addEventListener('click',event=>{if(!event.target.closest('.site-header'))closeMenu();});
-document.querySelector('#year').textContent=String(new Date().getFullYear());
+import { PACKAGES, createQuoteMessage, createSmsUrl } from './quote.js';
+import { mountHeroMedia } from './hero-media.js';
+
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const menu = document.querySelector('#mobile-menu');
+const menuSummary = menu.querySelector('summary');
+const menuPanel = menu.querySelector('.menu-panel');
+let closingMenu;
+function closeMenu({ restoreFocus = false, animate = true } = {}) {
+  if (!menu.open) return;
+  closingMenu?.cancel();
+  const finish = () => {
+    menu.open = false;
+    menuSummary.setAttribute('aria-label', 'Open navigation menu');
+    if (restoreFocus) menuSummary.focus({ preventScroll: true });
+  };
+  if (!animate || reducedMotion.matches || !menuPanel.animate) return finish();
+  closingMenu = menuPanel.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-4px)' }], { duration: 120, easing: 'ease-out' });
+  closingMenu.finished.then(finish).catch(() => {});
+}
+menuSummary.addEventListener('click', event => {
+  if (menu.open) { event.preventDefault(); closeMenu({ restoreFocus: true }); }
+});
+menu.addEventListener('toggle', () => menuSummary.setAttribute('aria-label', menu.open ? 'Close navigation menu' : 'Open navigation menu'));
+menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu({ animate: false })));
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && menu.open) closeMenu({ restoreFocus: true, animate: false });
+});
+document.addEventListener('click', event => {
+  if (!menu.contains(event.target)) closeMenu();
+});
+document.addEventListener('focusin', event => {
+  if (menu.open && !menu.contains(event.target)) closeMenu({ animate: false });
+});
+matchMedia('(min-width: 901px)').addEventListener('change', event => {
+  if (event.matches) closeMenu({ animate: false });
+});
+
+const form = document.querySelector('#quote-form');
+const openMessages = document.querySelector('#open-messages');
+const preview = document.querySelector('#message-preview');
+const previewDisclosure = document.querySelector('.message-disclosure');
+const copyButton = document.querySelector('.copy-message');
+const selectionStatus = document.querySelector('#quote-selection');
+const copyStatus = document.querySelector('#copy-status');
+function readQuote() { return Object.fromEntries(new FormData(form)); }
+function updateQuote(announce = false) {
+  const quote = readQuote();
+  const message = createQuoteMessage(quote);
+  preview.value = message;
+  openMessages.href = createSmsUrl(message);
+  for (const key of ['quick', 'full']) document.querySelector('#package-' + key).dataset.selected = String(quote.package === key);
+  copyStatus.textContent = '';
+  if (announce) selectionStatus.textContent = PACKAGES[quote.package] + ' selected for your quote.';
+}
+form.addEventListener('input', () => updateQuote());
+form.addEventListener('change', event => updateQuote(event.target.name === 'package'));
+// No form submission or personal details in a page URL, including Enter in a field.
+form.addEventListener('submit', event => event.preventDefault());
+document.querySelectorAll('[data-package]').forEach(link => link.addEventListener('click', event => {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+  const key = link.dataset.package;
+  if (!Object.hasOwn(PACKAGES, key)) return;
+  event.preventDefault();
+  const radio = form.querySelector('input[name="package"][value="' + key + '"]');
+  radio.checked = true;
+  updateQuote(true);
+  closeMenu({ animate: false });
+  document.querySelector('#contact').scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
+  radio.focus({ preventScroll: true });
+}));
+copyButton.addEventListener('click', async () => {
+  const message = createQuoteMessage(readQuote());
+  try {
+    await navigator.clipboard.writeText(message);
+    copyStatus.textContent = 'Message copied. Paste it into a text to (832) 466-1100.';
+  } catch {
+    previewDisclosure.open = true;
+    preview.focus();
+    preview.select();
+    copyStatus.textContent = 'Copy the selected message, then paste it into a text to (832) 466-1100.';
+  }
+});
+copyButton.hidden = false;
+previewDisclosure.hidden = false;
+updateQuote();
+document.querySelector('#year').textContent = String(new Date().getFullYear());
+
+// Content is visible by default. Only two noncritical headings receive a small,
+// once-only entrance, and no movement affects the hero or quote controls.
+if (!reducedMotion.matches && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      if (!reducedMotion.matches) entry.target.classList.add('revealed');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('#work h2, #reviews h2').forEach(node => observer.observe(node));
+  reducedMotion.addEventListener('change', event => { if (event.matches) observer.disconnect(); });
+}
+
+const mediaRoot = document.querySelector('[data-hero-media]');
+if (mediaRoot) mountHeroMedia(mediaRoot);

@@ -1,12 +1,21 @@
 # TLC Detailing
 
-Static, responsive mobile-detailing website. Primary actions open the visitor's phone or messaging app; no personal data is collected by the site and no booking is claimed to be confirmed.
+Premium static website in the existing project. No framework or runtime dependencies were added. Hosting identity and production remain unchanged.
 
-Business details and service packages were supplied in the customer's Google and Instagram screenshots. The rating/review count reflects those supplied screenshots. Prices, exact opening hours, and service durations were not supplied and are not asserted.
+## Local use
 
-The photography is illustrative licensed stock, credited in the page footer. Actual business work is linked through Instagram.
+- `npm run dev` starts the existing preview at http://127.0.0.1:4173.
+- `npm run build` validates HTML anchors, local assets, imports, JavaScript syntax and absence of stock references, then emits a byte-for-byte static release under ignored `.sites-build/`.
+- `npm test` runs the quote and progressive-video controller tests with Node's built-in runner.
 
-- Hero: Brecht Denil / Unsplash, https://unsplash.com/photos/black-sports-car-parked-on-a-dirt-road-at-sunset-ezKQu-0nHgw ; https://unsplash.com/license
-- Supporting image: Borta / Pexels, https://www.pexels.com/photo/sleek-black-car-at-sunset-with-reflections-31968456/ ; https://www.pexels.com/license/
+The canonical site files remain in `dist/`. Quote details stay in the page's memory. Open Messages creates an SMS draft; it does not send, confirm a price, or reserve an appointment. Copy has a manual selection fallback. No backend, persistence, tracking, or integration was added.
 
-Run `node preview.mjs` from this directory to preview at http://127.0.0.1:4173. The deployable static files are in `dist/`.
+Native details and SMS/call links remain usable without JavaScript. Reduced-motion users get no motion or autoplay. Content is visible without entrance animations.
+
+## Recoverable checkpoint
+
+`checkpoint-before-premium-upgrade-20260914` points to the original committed site. The working project contains the upgrade. Do not push, publish, or modify hosting access without the user's approval.
+
+## Media and evidence
+
+Read `MEDIA.md` for the original-media blocker and the optional video integration contract. The stock assets have been removed from the serving folder. See `content/sources.md` for package and testimonial provenance. Original photo crops, image optimization, and real video playback cannot be completed without approved media.
