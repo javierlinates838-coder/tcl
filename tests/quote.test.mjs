@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createQuoteMessage, createSmsUrl } from '../dist/quote.js';
+import { PHONE, createQuoteMessage, createSmsUrl } from '../dist/quote.js';
 
 test('package selections survive the message handoff', () => {
-  for (const [key, name] of [['quick', 'Quick Detail'], ['full', 'Extra TLC Full Detail']]) {
-    const message = createQuoteMessage({ package: key, vehicle: '2022 Toyota Camry', area: 'Rosedale' });
+  for (const [key, name] of [['quick', 'Quick Detail'], ['full', 'Full Detail']]) {
+    const message = createQuoteMessage({ package: key, vehicle: '2022 Toyota Camry', area: 'Downtown' });
     assert.match(message, new RegExp(name));
-    assert.match(message, /Vehicle: 2022 Toyota Camry\nArea: Rosedale/);
+    assert.match(message, /Vehicle: 2022 Toyota Camry\nArea: Downtown/);
     const uri = createSmsUrl(message);
-    assert.ok(uri.startsWith('sms:+18324661100?body='));
+    assert.ok(uri.startsWith('sms:' + PHONE + '?body='));
     assert.equal(decodeURIComponent(uri.split('?body=')[1]), message);
   }
 });

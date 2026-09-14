@@ -1,19 +1,26 @@
-# TLC Detailing
+# Mobile detailing site template
 
-The existing static website, refined around real TLC photography, a silent Mercedes interior film and attributed customer review excerpts. No framework or production dependencies were added. Published on Netlify at https://tlc-detailing-bakersfield.netlify.app, connected to javierlinates838-coder/tcl main. netlify.toml publishes dist directly.
+A static, single-page mobile detailing website with no framework or production dependencies. All client-specific content (name, phone, city, photos, video, logo, reviews and social links) has been removed and replaced with clearly labelled placeholders, so the site can be re-skinned for a new client while keeping every design and animation feature intact. netlify.toml publishes dist directly.
 
 ## Local use
 - npm run dev — http://127.0.0.1:4173
 - npm run build — validates the site and copies a static release to ignored .sites-build/.
-- npm test — runs 23 tests using Node's built-in runner.
+- npm test — runs the quote, hero-media and section-motion tests using Node's built-in runner.
 - Local media failure/preference fixture: http://127.0.0.1:4173/__checks__/media.html (outside the deployable dist folder).
 
 Canonical site files are in dist/. Quote details remain in page memory. Open Messages opens a draft; it does not send, confirm pricing or book. Native details and package SMS/call links remain available without JavaScript.
 
-## Recovery and sources
-Tag checkpoint-before-real-media-20260914 preserves the version before this photographic refinement. Tag checkpoint-before-premium-upgrade-20260914 preserves the original site. Do not publish or push without user approval.
+## Preserved features
+- Hero photograph that crossfades into a silent looping video once a frame is decoded, with photo fallback on mobile, reduced motion, Save-Data, slow loading, buffering and playback errors (dist/hero-media.js).
+- Once-only section entrance animations that respect reduced motion and never move a focused element (dist/section-motion.js).
+- Animated mobile menu, hover/focus micro-interactions, gold photo frames, custom SVG icon sprite (dist/assets/icons.svg), package selection that fills the quote form and SMS draft, copy-to-clipboard fallback and Netlify badge suppression.
 
-Photo framing and entrance-motion changes are recoverable from tag checkpoint-before-photo-motion-20260914.
+## Setting up a new client
+Search dist/index.html for `CLIENT:` comments. Each one marks a placeholder to replace:
+1. Business name, city/state, founding year and phone number (also `PHONE` and `PHONE_DISPLAY` in dist/quote.js, and the tests in tests/quote.test.mjs).
+2. Hero poster and video, six 3:4 photos and the logo in dist/assets/. Record the sources in content/approved-media.json. See MEDIA.md for the exact specifications.
+3. Package names and inclusions from the client's own service sheet.
+4. Verified review excerpts, Google rating, review count, listing URL and the date checked.
+5. Instagram/TikTok URLs.
 
-See MEDIA.md, VALIDATION.md and content/ for media, reviews, package provenance and measured checks.
-
+Do not publish or push without user approval.
