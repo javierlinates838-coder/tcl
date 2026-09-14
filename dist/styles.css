@@ -116,7 +116,7 @@ html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transiti
 }
 /* Photography-led TLC refinement. Media keeps its own space; copy never moves. */
 :root{--bg:#0d0e0e;--surface:#171818;--surface-raised:#202121;--line:#323333;--muted:#b7b8b4;--gold:#c6a46b;--gold-light:#dfc393;--ink:#111212}
-body{background:var(--bg)}.site-header{background:#0d0e0ef7}.header-inner{min-height:5.6rem}.brand-logo{width:3.35rem;height:3.35rem;object-fit:contain;border-radius:50%}.brand-name small{font-size:.65rem;letter-spacing:.14em}.wordmark{gap:.75rem}
+body{background:var(--bg)}.site-header{background:var(--bg)}.header-inner{min-height:5.6rem}.brand-logo{width:3.35rem;height:3.35rem;object-fit:contain;border-radius:50%}.brand-name small{font-size:.65rem;letter-spacing:.14em}.wordmark{gap:.75rem}
 .button{border-radius:3px;min-height:3.5rem;transition:background 180ms,color 180ms,border-color 180ms,box-shadow 180ms,transform 180ms}.button:hover{transform:translateY(-2px)}.button:active{transform:translateY(0)}.header-quote{min-height:2.8rem}
 h1,h2{font-family:var(--display);font-weight:600;letter-spacing:-.015em}h1{font-size:clamp(5.8rem,8.6vw,8.2rem);line-height:.94}h2{font-size:clamp(2.8rem,4.3vw,4.4rem);line-height:1.02}h1 span{color:var(--gold-light)}h2 em{font:inherit;letter-spacing:inherit}
 .eyebrow{font-size:.7rem;letter-spacing:.18em}.hero{isolation:isolate;background:#0d0e0e;min-height:690px;display:flex;flex-direction:column;justify-content:center}
@@ -141,3 +141,6 @@ h1,h2{font-family:var(--display);font-weight:600;letter-spacing:-.015em}h1{font-
 @media(max-width:680px){.contact-heading:after{background-image:linear-gradient(90deg,#0002,#0000),url('/assets/tlc-paint-480.webp')}}
 @media(max-width:360px){.hero h1{font-size:3.7rem}.hero-actions .button{font-size:.7rem;padding-inline:.75rem;gap:.45rem}.hero-actions{flex-wrap:nowrap}.media-caption>span{max-width:9rem}}
 @media(min-width:681px){#package-full .package-photo img{object-position:50% 62%}}
+/* Keep every navigation action reachable in short landscape viewports. */
+@media(max-width:900px){.menu-panel{max-height:calc(100vh - 5rem);max-height:calc(100dvh - 5rem);overflow-y:auto;overscroll-behavior:contain}}
+#quote-form:focus{outline:none}

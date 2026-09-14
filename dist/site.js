@@ -66,8 +66,8 @@ document.querySelectorAll('[data-package]').forEach(link => link.addEventListene
   radio.checked = true;
   updateQuote(true);
   closeMenu({ animate: false });
-  document.querySelector('#contact').scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
   radio.focus({ preventScroll: true });
+  form.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
 }));
 copyButton.addEventListener('click', async () => {
   const message = createQuoteMessage(readQuote());

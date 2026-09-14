@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TLC local media verification</title><link rel="stylesheet" href="/styles.css"><style>body{padding:2rem}.fixture{position:relative;height:70vh;max-width:600px;isolation:isolate}.fixture [data-hero-media]{inset:0}.fixture [data-media-toggle]{position:absolute;bottom:1rem;right:1rem}.fixture-status{white-space:pre-wrap}</style>
-<h1 style="font-size:2rem">Local media verification</h1><nav><a href="?mode=reduced">Reduced motion</a> · <a href="?mode=failed">Failed video</a> · <a href="?mode=blocked">Rejected autoplay</a> · <a href="?mode=data">Save data</a></nav>
-<p id="fixture-status" class="fixture-status" role="status"></p><div class="fixture"><div data-hero-media data-approved-media="true"><picture><img data-hero-photo src="/assets/tlc-motion-poster-mobile.webp" width="540" height="960" alt="Real TLC Mercedes interior"></picture><video data-src="/assets/tlc-interior-film.mp4" muted playsinline preload="none"></video><button data-media-toggle hidden>Play video</button><span data-media-status role="status" class="sr-only"></span></div></div>
+<h1 style="font-size:2rem">Local media verification</h1><nav><a href="?mode=normal">Normal playback</a> · <a href="?mode=reduced">Reduced motion</a> · <a href="?mode=failed">Failed video</a> · <a href="?mode=blocked">Rejected autoplay</a> · <a href="?mode=data">Save data</a></nav>
+<button type="button" id="native-pause">Pause through browser media API</button><p id="fixture-status" class="fixture-status" role="status"></p><div class="fixture"><div data-hero-media data-approved-media="true"><picture><img data-hero-photo src="/assets/tlc-motion-poster-mobile.webp" width="540" height="960" alt="Real TLC Mercedes interior"></picture><video data-src="/assets/tlc-interior-film.mp4" muted playsinline preload="none"></video><button data-media-toggle hidden>Play video</button><span data-media-status role="status" class="sr-only"></span></div></div>
 <script type="module">
 import {mountHeroMedia} from '/hero-media.js';
 const mode=new URL(location.href).searchParams.get('mode') || 'reduced';
@@ -17,5 +17,6 @@ mountHeroMedia(root,{
 });
 function report(){document.querySelector('#fixture-status').textContent=JSON.stringify({mode,state:root.dataset.mediaState,src:video.getAttribute('src'),paused:video.paused,duration:Number.isFinite(video.duration)?video.duration:null,photoLoaded:root.querySelector('img').naturalWidth>0,status:root.querySelector('[data-media-status]').textContent},null,2);}
 new MutationObserver(report).observe(root,{attributes:true,childList:true,subtree:true});
-video.addEventListener('playing',report);report();
+document.querySelector('#native-pause').addEventListener('click',()=>video.pause());
+video.addEventListener('pause',report);video.addEventListener('playing',report);report();
 </script></html>

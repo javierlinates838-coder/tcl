@@ -140,3 +140,41 @@ test('responsive poster changes preserve a visitor pause and the mobile photo de
   assert.equal(mobile.video.loads, 0);
   mobile.controller.destroy();
 });
+
+test('an older play promise cannot pause a newer successful playback', async () => {
+  const f = fixture({ mobile: true });
+  const pending = [];
+  f.video.play = () => {
+    f.video.paused = false;
+    return new Promise(resolve => pending.push(resolve));
+  };
+  const first = f.controller.play();
+  f.controller.pause();
+  const second = f.controller.play();
+  f.ready(); pending[1](); await second;
+  pending[0](); await first;
+  assert.equal(f.video.paused, false);
+  assert.equal(f.root.dataset.mediaState, 'playing');
+  assert.equal(f.button.attrs['aria-label'], 'Pause background video');
+  f.controller.destroy();
+});
+
+test('a native browser pause restores the photo and accurate controls', async () => {
+  const f = fixture({ mobile: true }); await f.controller.play(); f.ready();
+  f.video.pause(); f.video.emit('pause');
+  assert.equal(f.root.dataset.mediaState, 'photo');
+  assert.equal(f.button.attrs['aria-label'], 'Play background video');
+  assert.equal(f.button.attrs['aria-pressed'], 'false');
+  await f.controller.play(); f.ready();
+  assert.equal(f.root.dataset.mediaState, 'playing');
+  f.controller.destroy();
+});
+
+test('a queued pause event does not interrupt an already resumed video', async () => {
+  const f = fixture({ mobile: true }); await f.controller.play(); f.ready();
+  f.controller.pause(); await f.controller.play(); f.ready();
+  f.video.emit('pause');
+  assert.equal(f.video.paused, false);
+  assert.equal(f.root.dataset.mediaState, 'playing');
+  f.controller.destroy();
+});

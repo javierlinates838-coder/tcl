@@ -95,7 +95,10 @@ export function mountHeroMedia(root, environment = {}) {
     timeout = schedule(() => { if (thisAttempt === attempt && desired) fail(); }, 8000);
     try {
       await video.play();
-      if (thisAttempt !== attempt || destroyed || !desired) { video.pause(); return; }
+      // A cancelled attempt may settle after a newer Play request has succeeded.
+      // It must not pause the same media element underneath that newer attempt.
+      if (thisAttempt !== attempt) return;
+      if (destroyed || !desired) { video.pause(); return; }
       revealWhenReady();
     } catch { if (thisAttempt === attempt && desired) fail(); }
   }
@@ -129,6 +132,11 @@ export function mountHeroMedia(root, environment = {}) {
     revealWhenReady();
   });
   on(video, 'error', fail);
+  on(video, 'pause', () => {
+    // Browser/OS media controls can pause without clicking our custom button.
+    // A queued pause from an earlier attempt is harmless once playback resumed.
+    if (desired && video.paused) pause();
+  });
   // A brief waiting event is normal at a loop boundary. Keep the decoded frame
   // during that gap; fall back only if playback cannot recover within two seconds.
   const buffering = () => {
